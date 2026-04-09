@@ -1,4 +1,5 @@
 import streamlit as st
+from functions import *
 st.set_page_config(page_title="Fishing Fleet Tracker",page_icon=":fishing_boat:", layout="wide")
 st.title("Fishing Fleet Tracker")
 st.space()
@@ -12,11 +13,7 @@ The goal of this project is to analyze the data to identify patterns and trends 
 st.space()
 
 """
-## Part I: Data Transformation
-
-The package contained twleve datasets of twelve months with each having around 10 million records, 
-this is a significantly large size so the datasets were shortned on the basis of the time spent on water,
-the datasets contains records only where time spent is greater than equal to 5 hours.
-This significantly reduced the size of all datasets making it easy to efficiently work on them.
+## Graphical Analysis
 """
-st.image("Datasets\dataset_size.png",caption="Size Difference")
+fig = geartype_dis('all')
+st.pyplot(fig,width="content")
