@@ -30,10 +30,7 @@ def country_dis():
   most_vessels_by_countries = df.groupby('flag')['mmsi_present'].sum().sort_values(ascending=False).head(9)
   other = df['mmsi_present'].sum() - most_vessels_by_countries.sum()
   most_vessels_by_countries['Other{279 Flags}'] = other
-  print(most_vessels_by_countries)
-  plt.figure(figsize=(18,9))
-  plt.pie(most_vessels_by_countries,labels=most_vessels_by_countries.index,autopct='%1.1f%%',colors=sns.color_palette('deep'))
-  plt.title('Distribution of Vessels by Country')
+  return most_vessels_by_countries
 
 # Function for distribution of Vessels by Activity
 # def activity_dis(country):
