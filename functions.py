@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df = pd.read_csv('Datasets/fleet_01.csv')
+df = pd.read_csv('Datasets/combined_dataset.csv')
 # df.head()
 
 # df.info()
@@ -15,6 +15,8 @@ df = pd.read_csv('Datasets/fleet_01.csv')
 plt.style.use('dark_background')
 #Count of Origins of the ships
 flag_list = df['flag'].unique()
+flag_list = flag_list.tolist()
+flag_list.insert(0,'ALL')
 countries = [country for country in flag_list if len(country)==3]
 unknown = [country for country in flag_list if len(country)!=3]
 # print("Countries : ",len(countries))
@@ -27,24 +29,21 @@ gear_list = df['geartype'].unique()
 
 #Distribution of Vessels by Country
 def country_dis():
-  most_vessels_by_countries = df.groupby('flag')['mmsi_present'].sum().sort_values(ascending=False).head(9)
+  most_vessels_by_countries = df.groupby('flag')['mmsi_present'].sum().sort_values(ascending=False).head(19)
   other = df['mmsi_present'].sum() - most_vessels_by_countries.sum()
   most_vessels_by_countries['Other{279 Flags}'] = other
   return most_vessels_by_countries
 
 # Function for distribution of Vessels by Activity
-# def activity_dis(country):
-#   if country.lower() == 'all':
-#     loitering_vessels = df.groupby('loitering')['mmsi_present'].sum()
-#   elif country.upper() in flag_list:
-#     loitering_vessels = df[df['flag'] == country.upper()].groupby('loitering')['mmsi_present'].sum()
-#   else:
-#     print('Invalid Country')
-#     return
-#   print(loitering_vessels)
-#   plt.figure(figsize=(12,6))
-#   plt.pie(loitering_vessels,labels=['Not Loitering','Loitering'],autopct='%1.1f%%',colors=sns.color_palette('deep'))
-#   plt.title(f"Distibution of {country.upper()} Vessels by Activity ")
+def activity_dis(country):
+  if country.lower() == 'all':
+    loitering_vessels = df.groupby('loitering')['mmsi_present'].sum()
+  elif country.upper() in flag_list:
+    loitering_vessels = df[df['flag'] == country.upper()].groupby('loitering')['mmsi_present'].sum()
+  else:
+    print('Invalid Country')
+  return loitering_vessels
+
 
 # activity_dis('all')
 
@@ -66,16 +65,13 @@ def geartype_dis(country):
     geartype_vessels['Other'] = other
   else:
     print('Invalid Country')
-    return
-  print(geartype_vessels)
-  plt.figure(figsize=(8,4))
-  plt.pie(geartype_vessels,labels=geartype_vessels.index,autopct='%1.1f%%',colors=sns.color_palette('deep'))
-  plt.title(f"Distibution of {country.upper()} Vessels by Geartype ")
+  return geartype_vessels
+  
 
-geartype_dis('ind')
+# geartype_dis('ind')
 
+# Function to plot Heatmap
 # import plotly.express as px
-
 # def density_df(country,gtype,activity,month):
 #   if country.lower() == 'all':
 #     print("Data is too big to process. Please choose one country at a time :)")
