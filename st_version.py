@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import streamlit.components.v1 as components
 import plotly.express as px
 from functions import *
 st.set_page_config(page_title="Fishing Fleet Tracker",page_icon=":fishing_boat:", layout="wide")
@@ -76,3 +77,27 @@ with right_cell2:
 
 st.space()
 """## Globe"""
+
+cols3 = st.columns([1,3])
+
+left_cell3 = cols3[0].container(
+    border=True,height="stretch",vertical_alignment="center"
+)
+with left_cell3:
+    country = st.selectbox('Select country/flag',flag_list2,key='eventchoice7')
+    gtype = st.selectbox('Select geartype',gear_list,key='eventchoice8')
+    act = st.selectbox('Select Activity',['Both','Loitering','Non Loitering'],key='eventchoice9')
+    month = st.selectbox('Select Month',['Jan','Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec','All'],key='eventchoice10')
+    month_map = {"All":'all','Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'June':6,'July':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
+right_cell3 = cols3[1].container(
+    border=True,height="stretch",vertical_alignment="center"
+)
+with right_cell3:
+    print(country,gtype,act,month_map[month])
+    data = density_df(country,gtype,act,month_map[month])
+    print(len(data.index))
+    if len(data.index) > 100000 :
+        data = data.sample(n=100_000, random_state=42)
+    deck = globe_plot(data)
+    html = deck.to_html(as_string=True)
+    components.html(html,height=600,scrolling=False)

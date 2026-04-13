@@ -206,51 +206,52 @@ def density_df(country,gtype,activity,month):
 # data_1 = density_df('usa','all','all','all')
 
 
-# import pydeck as pdk
+import pydeck as pdk
 
-# COUNTRIES = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson"
+def globe_plot(data):
+  COUNTRIES = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson"
 
-# view_state = pdk.ViewState(latitude=0, longitude=0, zoom=0, min_zoom=-5,max_zoom=15,pitch=0,
-#     bearing=0,)
+  view_state = pdk.ViewState(latitude=0, longitude=0, zoom=0, min_zoom=-5,max_zoom=15,pitch=0,
+      bearing=0,)
 
-# # Set height and width variables
-# view = pdk.View(type="_GlobeView", controller=True)
+  # Set height and width variables
+  view = pdk.View(type="_GlobeView", controller=True)
 
 
-# layers = [
-#     pdk.Layer(
-#         "GeoJsonLayer",
-#         id="base-map",
-#         data=COUNTRIES,
-#         stroked=False,
-#         filled=True,
-#         get_fill_color=[200, 200, 200],
-#     ),
-#     pdk.Layer(
-#         "ColumnLayer",
-#         id="power-plant",
-#         data=data_1,
-#         get_elevation="mmsi_present",
-#         get_position=["lon", "lat"],
-#         elevation_scale=1000,
-#         pickable=True,
-#         auto_highlight=True,
-#         radius=20000,
-#         get_fill_color=[160, 32, 240]
-#     ),
-# ]
+  layers = [
+      pdk.Layer(
+          "GeoJsonLayer",
+          id="base-map",
+          data=COUNTRIES,
+          stroked=False,
+          filled=True,
+          get_fill_color=[200, 200, 200],
+      ),
+      pdk.Layer(
+          "ColumnLayer",
+          id="power-plant",
+          data=data,
+          get_elevation="mmsi_present",
+          get_position=["lon", "lat"],
+          elevation_scale=1000,
+          pickable=True,
+          auto_highlight=True,
+          radius=20000,
+          get_fill_color=[36, 255, 248]
+      ),
+  ]
 
-# deck = pdk.Deck(
-#     views=[view],
-#     initial_view_state=view_state,
-#     width = "100%",
-#     height = 700,
-#     tooltip={"text": "{flag}, {geartype}"},
-#     layers=layers,
-#     map_provider=None,
-#     # Note that this must be set for the globe to be opaque
-#     parameters={"cull": True},
-# )
+  deck = pdk.Deck(
+      views=[view],
+      initial_view_state=view_state,
+      width = "100%",
+      height = 700,
+      tooltip={"text": "{flag}, {geartype}"},
+      layers=layers,
+      map_provider=None,
+      # Note that this must be set for the globe to be opaque
+      parameters={"cull": True},
+  )
 
-# deck.to_html("globe_view.html", css_background_color="black")
+  return deck
 
