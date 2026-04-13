@@ -16,6 +16,7 @@ plt.style.use('dark_background')
 #Count of Origins of the ships
 flag_list = df['flag'].unique()
 flag_list = flag_list.tolist()
+flag_list2 = flag_list.copy()
 flag_list.insert(0,'ALL')
 countries = [country for country in flag_list if len(country)==3]
 unknown = [country for country in flag_list if len(country)!=3]
@@ -24,6 +25,8 @@ unknown = [country for country in flag_list if len(country)!=3]
 
 #Types of gears used for fishing
 gear_list = df['geartype'].unique()
+gear_list = gear_list.tolist()
+gear_list.insert(0,'All')
 # print("Types of gears : ",len(gear_list))
 # print(gear_list)
 
@@ -72,33 +75,52 @@ def geartype_dis(country):
 
 # Function to plot Heatmap
 # import plotly.express as px
-# def density_df(country,gtype,activity,month):
-#   if country.lower() == 'all':
-#     print("Data is too big to process. Please choose one country at a time :)")
-#   elif country.upper() in flag_list:
-#     if gtype.lower() == 'all':
-#       if activity.lower() == 'all':
-#         if month == 'all':
-#           df_temp = df[df['flag'] == country.upper()]
-#         else:
-#           df_temp = df[(df['flag'] == country.upper())&(df['month']==month)]
-#         return df_temp
-#       elif activity.lower() == 'loitering':
-#         if month == 'all':
-#           df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 1)]
-#         else:
-#           df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 1)&(df['month']==month)]
-#         return df_temp
-#       elif activity.lower() == 'not loitering':
-#         if month == 'all':
-#           df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 0)]
-#         else:
-#           df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 0)&(df['month']==month)]
-#         return df_temp
-#       else:
-#         print('Invalid Activity')
-#         return
-
+def density_df(country,gtype,activity,month):
+  print('In the function')
+  if country.lower() == 'all':
+    return "Data is too big to process. Please choose one country at a time :)"
+  elif country.upper() in flag_list:
+    if gtype == 'All':
+      if activity.lower() == 'both':
+        if month == 'all':
+          df_temp = df[df['flag'] == country.upper()]
+        else:
+          df_temp = df[(df['flag'] == country.upper())&(df['month']==month)]
+        return df_temp
+      elif activity.lower() == 'loitering':
+        if month == 'all':
+          df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 1)]
+        else:
+          df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 1)&(df['month']==month)]
+        return df_temp
+      elif activity.lower() == 'non loitering':
+        if month == 'all':
+          df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 0)]
+        else:
+          df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 0)&(df['month']==month)]
+        return df_temp
+    elif gtype in gear_list:
+      if activity.lower() == 'both':
+        if month == 'all':
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())]
+        else:
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['month']==month)]
+        return df_temp
+      elif activity.lower() == 'loitering':
+        if month == 'all':
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 1)]
+        else:
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 1)&(df['month']==month)]
+        return df_temp
+      elif activity.lower() == 'non loitering':
+        if month == 'all':
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 0)]
+        else:
+          df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 0)&(df['month']==month)]
+        return df_temp
+      else:
+        print('Invalid Activity')
+        return
 #     elif gtype.lower() in gear_list:
 #       if activity.lower() == 'all':
 #         if month == 'all':
