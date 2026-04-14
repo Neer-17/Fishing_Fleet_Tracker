@@ -59,7 +59,7 @@ with right_cell1:
     flag = chosen_country
     data = geartype_dis(flag)
     fig = px.pie(data,values=data.values,names=data.index)
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch)
 
 mon = st.container(
     border=True, height="stretch", vertical_alignment="center"
@@ -122,7 +122,8 @@ with right_cell3:
     print(len(data.index))
     if len(data.index) > 100000 :
         data = data.sample(n=100_000, random_state=42)
-    deck = globe_plot(data)
+    data_records = data[['lon', 'lat', 'mmsi_present', 'flag', 'geartype']].to_dict(orient='records')
+    deck = globe_plot(data_records)
     html = deck.to_html(as_string=True)
     components.html(html,height=600,scrolling=False)
 
