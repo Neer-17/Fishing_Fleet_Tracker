@@ -1,4 +1,5 @@
-# 🎣 Fishing Fleet Tracker
+# 🎣 Fishing Fleet Tracker [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app-url.streamlit.app)
+
 
 An interactive data analysis and visualization dashboard for the **Monthly Fishing Fleet 2024** dataset provided by [Global Fishing Watch](https://globalfishingwatch.org/).
 
