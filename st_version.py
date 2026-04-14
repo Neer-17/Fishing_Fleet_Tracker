@@ -68,7 +68,7 @@ right_cell2 = cols2[1].container(
 )
 with right_cell2:
     print(country,gtype,act,month_map[month])
-    data = density_df(country,gtype,act,month_map[month])
+    data = get_data(country,gtype,act,month_map[month])
     print(len(data.index))
     if len(data.index) > 100000 :
         data = data.sample(n=100_000, random_state=42)
@@ -76,7 +76,7 @@ with right_cell2:
     st.plotly_chart(fig)
 
 st.space()
-"""## Globe"""
+"""## Globe Visulization"""
 
 cols3 = st.columns([1,3])
 
@@ -94,7 +94,7 @@ right_cell3 = cols3[1].container(
 )
 with right_cell3:
     print(country,gtype,act,month_map[month])
-    data = density_df(country,gtype,act,month_map[month])
+    data = get_data(country,gtype,act,month_map[month])
     print(len(data.index))
     if len(data.index) > 100000 :
         data = data.sample(n=100_000, random_state=42)

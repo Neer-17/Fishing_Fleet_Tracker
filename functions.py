@@ -1,18 +1,13 @@
 import pandas as pd
 import numpy as np
+import pydeck as pdk
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 df = pd.read_csv('Datasets/combined_dataset.csv')
-# df.head()
 
-# df.info()
-
-# df.describe()
-
-# cor = df.corr(numeric_only=True)
-# sns.heatmap(cor,annot=True,cmap='coolwarm')
 plt.style.use('dark_background')
+
 #Count of Origins of the ships
 flag_list = df['flag'].unique()
 flag_list = flag_list.tolist()
@@ -20,15 +15,13 @@ flag_list2 = flag_list.copy()
 flag_list.insert(0,'ALL')
 countries = [country for country in flag_list if len(country)==3]
 unknown = [country for country in flag_list if len(country)!=3]
-# print("Countries : ",len(countries))
-# print("Unokown : ",len(unknown))
+
 
 #Types of gears used for fishing
 gear_list = df['geartype'].unique()
 gear_list = gear_list.tolist()
 gear_list.insert(0,'All')
-# print("Types of gears : ",len(gear_list))
-# print(gear_list)
+
 
 #Distribution of Vessels by Country
 def country_dis():
@@ -37,7 +30,7 @@ def country_dis():
   most_vessels_by_countries['Other{279 Flags}'] = other
   return most_vessels_by_countries
 
-# Function for distribution of Vessels by Activity
+# Distribution of Vessels by Activity
 def activity_dis(country):
   if country.lower() == 'all':
     loitering_vessels = df.groupby('loitering')['mmsi_present'].sum()
@@ -48,15 +41,7 @@ def activity_dis(country):
   return loitering_vessels
 
 
-# activity_dis('all')
-
-# Distibution of Vessels by Geartype
-# vessel_dis_by_geartype = df.groupby('geartype')['mmsi_present'].sum()
-# print(vessel_dis_by_geartype)
-# plt.figure(figsize=(24,6))
-# sns.barplot(x=vessel_dis_by_geartype.index,y=vessel_dis_by_geartype.values)
-# plt.title(f"Distibution of Vessels by Geartype")
-
+# Distribution of Vessels by Geartype
 def geartype_dis(country):
   if country.lower() == 'all':
     geartype_vessels = df.groupby('geartype')['mmsi_present'].sum().sort_values(ascending=False).head(5)
@@ -70,12 +55,8 @@ def geartype_dis(country):
     print('Invalid Country')
   return geartype_vessels
   
-
-# geartype_dis('ind')
-
-# Function to plot Heatmap
-# import plotly.express as px
-def density_df(country,gtype,activity,month):
+# Function to get Data
+def get_data(country,gtype,activity,month):
   print('In the function')
   if country.lower() == 'all':
     return "Data is too big to process. Please choose one country at a time :)"
@@ -121,93 +102,8 @@ def density_df(country,gtype,activity,month):
       else:
         print('Invalid Activity')
         return
-#     elif gtype.lower() in gear_list:
-#       if activity.lower() == 'all':
-#         if month == 'all':
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())]
-#         else:
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['month']==month)]
-#         return df_temp
-#       elif activity.lower() == 'loitering':
-#         if month == 'all':
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 1)]
-#         else:
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 1)&(df['month']==month)]
-#         return df_temp
-#       elif activity.lower() == 'not loitering':
-#         if month == 'all':
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 0)]
-#         else:
-#           df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 0)&(df['month']==month)]
 
-#         return
-#       else:
-#         print('Invalid Activity')
-#         return
-#   else:
-#     print('Invalid Country or Geartype')
-#     return
-
-# def visualize_density(df):
-#   fig = px.density_map(df,lat='lat',lon='lon',z='mmsi_present',radius=10,zoom=1,title='Vessel Density Map')
-#   fig.show()
-
-# visualize_density('chn','all','all','all')
-
-# def visualize_points(country,gtype,activity):
-#   if country.lower() == 'all':
-#     print("Data is too big to process. Please choose one country at a time :)")
-#   elif country.upper() in flag_list:
-#     if gtype.lower() == 'all':
-#       if activity.lower() == 'all':
-#         df_temp = df[df['flag'] == country.upper()]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='orthographic')
-#         fig.show()
-#         return
-#       elif activity.lower() == 'loitering':
-#         df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 1)]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='natural earth')
-#         fig.show()
-#         return
-#       elif activity.lower() == 'not loitering':
-#         df_temp = df[(df['flag'] == country.upper()) & (df['loitering'] == 0)]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='natural earth')
-#         fig.show()
-#         return
-#       else:
-#         print('Invalid Activity')
-#         return
-
-#     elif gtype.lower() in gear_list:
-#       if activity.lower() == 'all':
-#         df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='natural earth')
-#         fig.show()
-#         return
-#       elif activity.lower() == 'loitering':
-#         df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 1)]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='natural earth')
-#         fig.show()
-#         return
-#       elif activity.lower() == 'not loitering':
-#         df_temp = df[(df['flag']==country.upper())&(df['geartype'] == gtype.lower())&(df['loitering'] == 0)]
-#         fig = px.scatter_geo(df_temp,lat='cell_ll_lat',lon='cell_ll_lon',color='loitering',hover_name='mmsi_present',hover_data=["flag","geartype","loitering"],projection='natural earth')
-#         fig.show()
-#         return
-#       else:
-#         print('Invalid Activity')
-#         return
-#   else:
-#     print('Invalid Country or Geartype')
-#     return
-
-# visualize_points('ind','trawlers','all')
-
-# data_1 = density_df('usa','all','all','all')
-
-
-import pydeck as pdk
-
+# Function to plot Vessels on Globe
 def globe_plot(data):
   COUNTRIES = "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_scale_rank.geojson"
 
