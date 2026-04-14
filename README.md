@@ -39,7 +39,7 @@ Mmsi_fleet/
 │   └── combined_dataset.csv       # Merged monthly fishing fleet data
 │
 ├── functions.py                   # All data processing and visualization logic
-├── st_version.py                  # Streamlit app UI
+├── app.py                  # Streamlit app UI
 ├── data_transformation.ipynb      # Data cleaning and merging notebook
 └── README.md
 ```
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
 **3. Run the Streamlit app**
 ```bash
-streamlit run st_version.py
+streamlit run app.py
 ```
 
 ---
