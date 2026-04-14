@@ -3,6 +3,10 @@ import pandas as pd
 import streamlit.components.v1 as components
 import plotly.express as px
 from functions import *
+@st.cache_data
+def load_data():
+    return pd.read_csv('Datasets/combined_dataset.csv')
+df = load_data()
 st.set_page_config(page_title="Fishing Fleet Tracker",page_icon=":fishing_boat:", layout="wide")
 st.title("Fishing Fleet Tracker")
 st.space()
@@ -13,7 +17,12 @@ This is an analysis of "Monthly Fishing Fleet 2024" datastets provided by the [*
 The datasets contains information about fishing vessels, the month the data was taken,  their location, country of origin, geartype used for fishing, time spent on water and the number of vessels in the fleet(mmsi present). 
 The goal of this project is to analyze the data to identify patterns and trends in fishing activities around the world.
 """
-st.space()
+st.space("small")
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Vessels", f"{df['mmsi_present'].sum():,}")
+col2.metric("Countries Tracked", df['flag'].nunique())
+col3.metric("Gear Types", df['geartype'].nunique()) 
 
 """## Graphical Analysis"""
 
@@ -24,6 +33,8 @@ left_cell1 = cols1[0].container(
 )
 with left_cell1:
     st.subheader("Distribution of Vessels by Country")
+    st.space("medium")
+    st.space("small")
     data = country_dis()
     fig = px.pie(data,values=data.values,names=data.index)
     st.plotly_chart(fig,use_container_width=True)
@@ -49,6 +60,19 @@ with right_cell1:
     data = geartype_dis(flag)
     fig = px.pie(data,values=data.values,names=data.index)
     st.plotly_chart(fig,use_container_width=True)
+
+mon = st.container(
+    border=True, height="stretch", vertical_alignment="center"
+)
+with mon:
+    st.subheader("Vessel Activity by Month")
+    con = st.selectbox('Select Country ',flag_list,key='month')
+    if con == 'ALL':
+        monthly_data = df.groupby('month')['mmsi_present'].sum().reset_index()
+    else:
+        monthly_data = df[df['flag']==con].groupby('month')['mmsi_present'].sum().reset_index()
+    fig = px.line(monthly_data, x='month', y='mmsi_present')
+    st.plotly_chart(fig)    
 
 """## Heatmap"""
 
@@ -79,7 +103,7 @@ st.space()
 """## Globe Visulization"""
 
 cols3 = st.columns([1,3])
-
+ 
 left_cell3 = cols3[0].container(
     border=True,height="stretch",vertical_alignment="center"
 )
@@ -101,3 +125,19 @@ with right_cell3:
     deck = globe_plot(data)
     html = deck.to_html(as_string=True)
     components.html(html,height=600,scrolling=False)
+
+f_region = st.container(
+    border=True,height="stretch",vertical_alignment="center"
+)
+with f_region:
+    st.subheader("Top Fishing Regions")
+    df_region = pd.read_csv('Datasets/regions.csv').reset_index(drop=True)
+    df_region.sort_values('Vessels',ascending=False,inplace=True)
+    st.dataframe(df_region,hide_index=True)
+
+r_data = st.container(
+    border=True,height="stretch",vertical_alignment="center"
+)
+with r_data:
+    st.subheader("Raw Data")
+    st.dataframe(df.sample(n=1000, random_state=42))
