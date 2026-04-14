@@ -150,7 +150,7 @@ def globe_plot(data):
       initial_view_state=view_state,
       width = "100%",
       height = 700,
-      tooltip={"text": "{flag}, {geartype},Loitering:{loitering},{lat}, {lon}"},
+      tooltip={"text": "{flag}, {geartype},Loitering:{loitering}"},
       layers=layers,
       map_provider=None,
       # Note that this must be set for the globe to be opaque
