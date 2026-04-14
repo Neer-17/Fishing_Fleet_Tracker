@@ -7,7 +7,7 @@ from functions import *
 def load_data():
     return pd.read_csv('Datasets/combined_dataset.csv')
 df = load_data()
-st.set_page_config(page_title="Fishing Fleet Tracker",page_icon=":fishing_boat:", layout="wide")
+st.set_page_config(page_title="Fishing Fleet Tracker",page_icon=":sailboat:", layout="wide")
 st.title("Fishing Fleet Tracker")
 st.space()
 """
