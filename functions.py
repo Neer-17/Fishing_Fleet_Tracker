@@ -109,7 +109,7 @@ def color_picker(loitering_value):
         return [255, 247, 0]
     return [36, 255, 248]
 
-df['color'] = df['loitering'].apply(color_picker)
+
 
 # Function to plot Vessels on Globe
 def globe_plot(data):
