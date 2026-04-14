@@ -37,7 +37,7 @@ with left_cell1:
     st.space("small")
     data = country_dis()
     fig = px.pie(data,values=data.values,names=data.index)
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 
 center_cell1 = cols1[1].container(
     border=True, height="stretch", vertical_alignment="center"
@@ -48,7 +48,7 @@ with center_cell1:
     flag = chosen_country
     data = activity_dis(flag)
     fig = px.pie(data,values=data.values,names=['Loitering','Non-Loitering'])
-    st.plotly_chart(fig,use_container_width=True)
+    st.plotly_chart(fig,width='stretch')
 
 right_cell1 = cols1[2].container(
     border=True,height="stretch",vertical_alignment="center"
@@ -59,7 +59,7 @@ with right_cell1:
     flag = chosen_country
     data = geartype_dis(flag)
     fig = px.pie(data,values=data.values,names=data.index)
-    st.plotly_chart(fig,width='stretch)
+    st.plotly_chart(fig,width='stretch')
 
 mon = st.container(
     border=True, height="stretch", vertical_alignment="center"
